@@ -54,12 +54,12 @@ module Capistrano
       def load_recipes(config) #:nodoc:
         # load the standard recipe definition
         config.load "standard"
-      
+
         # load systemwide config/recipe definition
         config.load(options[:sysconf]) if options[:sysconf] && File.file?(options[:sysconf])        
-      
-        # load user config/recipe definition
-        config.load(options[:dotfile]) if options[:dotfile] && File.file?(options[:dotfile])
+
+        # load user config/recipe definitions
+        Array(options[:dotfiles]).each { |dotfile| config.load(dotfile) }
 
         Array(options[:recipes]).each { |recipe| config.load(recipe) }
       end

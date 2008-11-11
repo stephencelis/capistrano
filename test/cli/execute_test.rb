@@ -55,16 +55,15 @@ class CLIExecuteTest < Test::Unit::TestCase
     @cli.execute!
   end
 
-  def test_execute_should_load_dotfile_if_dotfile_set_and_exists
-    @cli.options[:dotfile] = "/home/jamis/.caprc"
+  def test_execute_should_load_dotfiles_if_dotfiles_exist
+    @cli.options[:dotfiles] = ["/home/jamis/.caprc", "/home/jamis/.recipes/stew.rb"]
     @config.expects(:load).with("/home/jamis/.caprc")
-    File.expects(:file?).with("/home/jamis/.caprc").returns(true)
+    @config.expects(:load).with("/home/jamis/.recipes/stew.rb")
     @cli.execute!
   end
 
-  def test_execute_should_not_load_dotfile_when_dotfile_set_and_not_exists
-    @cli.options[:dotfile] = "/home/jamis/.caprc"
-    File.expects(:file?).with("/home/jamis/.caprc").returns(false)
+  def test_execute_should_not_load_dotfiles_if_dotfiles_do_not_exist
+    @cli.options[:dotfiles] = nil
     @cli.execute!
   end
 

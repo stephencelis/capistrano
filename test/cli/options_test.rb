@@ -215,16 +215,16 @@ class CLIOptionsTest < Test::Unit::TestCase
     assert !@cli.options.key?(:sysconf)
   end
 
-  def test_parse_options_without_x_should_set_dotfile
+  def test_parse_options_without_x_should_set_dotfiles
     @cli.args << "-v"
     @cli.parse_options!
-    assert @cli.options.key?(:dotfile)
+    assert @cli.options.key?(:dotfiles)
   end
 
-  def test_parse_options_with_x_should_unset_dotfile
+  def test_parse_options_with_x_should_unset_dotfiles
     @cli.args << "-x"
     @cli.parse_options!
-    assert !@cli.options.key?(:dotfile)
+    assert !@cli.options.key?(:dotfiles)
   end
 
   def test_parse_options_without_q_or_v_should_set_verbose_to_3

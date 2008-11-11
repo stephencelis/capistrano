@@ -114,8 +114,8 @@ module Capistrano
           ) { options.delete(:sysconf) }
 
           opts.on("-x", "--skip-user-config",
-            "Don't load the user config file (.caprc)"
-          ) { options.delete(:dotfile) }
+            "Don't load user config files (~/.caprc, ~/.recipes/*.rb)"
+          ) { options.delete(:dotfiles) }
         end
       end
 
@@ -125,7 +125,7 @@ module Capistrano
       def parse_options! #:nodoc:
         @options = { :recipes => [], :actions => [],
           :vars => {}, :pre_vars => {},
-          :sysconf => default_sysconf, :dotfile => default_dotfile }
+          :sysconf => default_sysconf, :dotfiles => default_dotfiles }
 
         if args.empty?
           warn "Please specify at least one action to execute."
@@ -183,8 +183,18 @@ module Capistrano
         File.join(sysconf_directory, "capistrano.conf")
       end
       
-      def default_dotfile #:nodoc:
-        File.join(home_directory, ".caprc")
+      def default_dotfiles #:nodoc:
+        dotfiles = Array(home_caprc)
+        dotfiles.concat(home_recipes)
+      end
+
+      def home_caprc
+        caprc = File.join(home_directory, ".caprc")
+        caprc if File.exists?(caprc)
+      end
+
+      def home_recipes
+        Dir[File.join(home_directory, ".recipes", "*.rb")]
       end
 
       def sysconf_directory #:nodoc:
